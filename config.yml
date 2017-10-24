@@ -1,0 +1,7 @@
+name: Containerized mail logmgr Platform 
+description: |
+  Containerized mail logmgr platform is used for analysing mail logs which contains postfix, kafka, zookeeper, JMX exporter for kafka, HAProxy for postfix containers 
+version: v1.0
+category: API Management Platform
+maintainer: Vignesh Kumar
+company: Apptivo

@@ -1,0 +1,81 @@
+.catalog:
+    name: "Mailtracker Log Analysing Service"
+    version: "v1"
+    description: "Send and analysing mail status using Postfix, Rsyslog, kafka"
+    questions:
+        - variable: DNS_IP_VAL
+          description: "Internal DNS server IP"
+          label: "DNS"
+          type: "string"
+          default: 10.80.0.1
+          required: true
+        - variable: DB_IP_VAL
+          description: "IP for OpenDKIM to connect to MySQL for fetching DKIM keys "
+          label: "MySQL DB IP for openDKIM"
+          required: true
+          default: 10.80.14.201
+          type: "string" 
+        - variable: TOPIC_VALUE
+          description: "Name of the topic for mailerlog"
+          label: "maillog topic name"
+          required: true
+          default: mailerlog
+          type: "string"
+
+zookeeper:
+  scale: 3
+  retain_ip: true
+  health_check:
+    port: 2181
+    interval: 5000
+    unhealthy_threshold: 3
+    request_line: ''
+    healthy_threshold: 2
+    response_timeout: 5000
+kafkabroker:
+  scale: 3
+  retain_ip: true
+  health_check:
+    port: 9092
+    interval: 5000
+    unhealthy_threshold: 3
+    request_line: ''
+    healthy_threshold: 2
+    response_timeout: 5000
+#kafkabroker-feeds:
+#  scale: 3
+#  retain_ip: true
+#  health_check:
+#    port: 9094
+#    interval: 5000
+#    unhealthy_threshold: 3
+#    request_line: ''
+#    healthy_threshold: 2
+#    response_timeout: 5000
+kafka-jmx-exporter:
+  scale: 3
+  retain_ip: true
+  start_on_create: true
+postfix:
+  scale: 3
+  retain_ip: true
+  start_on_create: true
+  health_check:
+    port: 25
+    interval: 5000
+    unhealthy_threshold: 3
+    request_line: ''
+    healthy_threshold: 2
+    response_timeout: 5000
+postfix-HA:
+  scale: 3
+  start_on_create: true
+  lb_config:
+    certs: []
+    port_rules:
+    - hostname: ''
+      priority: 1
+      protocol: tcp
+      service: postfix
+      source_port: 25
+      target_port: 25
